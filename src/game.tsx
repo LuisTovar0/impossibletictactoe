@@ -7,6 +7,7 @@ interface GameProps {
 interface GameState {
   xIsNext: boolean;
   history: string[][];
+  stepNum: number;
 }
 
 export default class Game extends React.Component<GameProps, GameState> {
@@ -14,7 +15,8 @@ export default class Game extends React.Component<GameProps, GameState> {
     super(props);
     this.state = {
       history: [Array(9).fill('')],
-      xIsNext: true
+      xIsNext: true,
+      stepNum: 0
     };
   }
 
@@ -55,11 +57,24 @@ export default class Game extends React.Component<GameProps, GameState> {
     return null;
   }
 
+  jumpTo(i: number) {
+    this.setState({history: this.state.history.slice(0, i + 1)});
+  }
+
   render() {
     const winner = this.calculateWinner();
     let status;
     if (winner) status = 'Winner: ' + winner;
     else status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+
+    const moves = this.state.history.slice(0, this.state.history.length - 1).map((moment, move) => {
+      const desc = move ?
+        'Go to move #' + move :
+        'Go to first move';
+      return (<li key={move}>
+        <button onClick={() => this.jumpTo(move)}>{desc}</button>
+      </li>);
+    });
 
     return (
       <div className="game">
@@ -71,7 +86,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         </div>
         <div className="game-info">
           <div className="status">{status}</div>
-          <ol>{/* TODO */}</ol>
+          <ol>{moves}</ol>
         </div>
       </div>
     );
