@@ -1,0 +1,8 @@
+node_modules
+build
+dist
+
+docker-compose.yml
+.dockerignore
+Dockerfile
+Dockerfile.prod

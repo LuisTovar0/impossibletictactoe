@@ -67,14 +67,17 @@ export default class Game extends React.Component<GameProps, GameState> {
     if (winner) status = 'Winner: ' + winner;
     else status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
 
-    const moves = this.state.history.slice(0, this.state.history.length - 1).map((moment, move) => {
-      const desc = move ?
-        'Go to move #' + move :
-        'Go to first move';
-      return (<li key={move}>
-        <button onClick={() => this.jumpTo(move)}>{desc}</button>
-      </li>);
-    });
+    const movesList = this.state.history.slice(0, this.state.history.length - 1)
+      .map((moment, move) => {
+        const desc = move ?
+          'Go to move #' + move :
+          'Go to first move';
+        return (<tr key={move}>
+          <td>
+            <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          </td>
+        </tr>);
+      });
 
     return (
       <div className="game">
@@ -86,7 +89,9 @@ export default class Game extends React.Component<GameProps, GameState> {
         </div>
         <div className="game-info">
           <div className="status">{status}</div>
-          <ol>{moves}</ol>
+          <table>
+            <tbody>{movesList}</tbody>
+          </table>
         </div>
       </div>
     );
